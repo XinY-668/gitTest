@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>淘宝选女友</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+            }
+            ul,
+            ol {
+                list-style: none;
+            }
+            h3 {
+                height: 40px;
+            }
+            button:disabled {
+                cursor: not-allowed;
+            }
+            .shopping {
+                width: 570px;
+                margin: 100px auto;
+                padding: 20px;
+                border: 1px solid #ccc;
+                position: relative;
+                overflow: hidden;
+            }
+            .shopping .left {
+                float: left;
+            }
+            .shopping .right {
+                float: right;
+            }
+            .shopping .girlImg {
+                position: relative;
+                width: 200px;
+                height: 200px;
+            }
+            .shopping .girlImg img {
+                width: 100%;
+                height: 100%;
+            }
+            .shopping .girlImg span {
+                display: none;
+                width: 100px;
+                height: 100px;
+                position: absolute;
+                background: rgba(255, 255, 0, 0.3);
+            }
+            .imgList {
+                width: 220px;
+                margin-top: 20px;
+            }
+            .imgList li {
+                float: left;
+                margin-right: 8px;
+                border: 2px solid transparent;
+            }
+            .imgList .ac {
+                border: 2px solid red;
+            }
+            .imgList li img {
+                width: 40px;
+                display: block;
+            }
+            .price {
+                height: 50px;
+                font-size: 30px;
+                color: red;
+                font-weight: bold;
+            }
+            .priceList {
+                overflow: hidden;
+                margin: 20px 0;
+            }
+            .priceList li {
+                float: left;
+                height: 30px;
+                line-height: 30px;
+                padding: 0 10px;
+                border: 2px solid #999;
+                margin-right: 10px;
+                cursor: pointer;
+            }
+            .priceList .ac {
+                border: 2px solid red;
+            }
+            .changeNum {
+                position: relative;
+                margin: 20px 0;
+            }
+            .changeNum input {
+                width: 40px;
+                height: 41px;
+                text-align: center;
+                line-height: 40px;
+                border: 1px solid #ccc;
+            }
+            .changeNum button {
+                height: 22px;
+                width: 20px;
+                background: none;
+                border: 1px solid #ccc;
+                position: absolute;
+            }
+            .changeNum .addBtn {
+                left: 41px;
+                top: 0px;
+            }
+            .changeNum .subBtn {
+                left: 41px;
+                top: 21px;
+            }
+            .okBtn {
+                height: 30px;
+                width: 100px;
+            }
+            .bigBox {
+                position: absolute;
+                width: 200px;
+                height: 200px;
+                left: 230px;
+                display: none;
+                overflow: hidden;
+            }
+            .bigBox img {
+                position: absolute;
+            }
+
+            .shopCart {
+                position: fixed;
+                right: 0;
+                top: 200px;
+                color: red;
+            }
+            .shopNum {
+                width: 60px;
+                height: 25px;
+                background: deeppink;
+                color: black;
+                text-align: center;
+                line-height: 25px;
+            }
+            .active {
+                width: 25px;
+                height: 25px;
+                background: skyblue;
+                position: absolute;
+            }
+            .price .ab {
+                display: block;
+            }
+            .price em {
+                display: none;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="shopping" id="shopping">
+            <div class="left">
+                <div class="girlImg" id="box">
+                    <img id="girl" src="4.jpeg" />
+                    <span></span>
+                </div>
+                <ol id="imgList" class="imgList">
+                    <li><img src="0.jpg" /></li>
+                    <li><img src="1.jpg" /></li>
+                    <li><img src="2.jpg" /></li>
+                    <li><img src="3.jpg" /></li>
+                </ol>
+            </div>
+            <div class="right">
+                <h3>淘宝选女友---不要998,女友带回家!!</h3>
+                <div id="price" class="price"><em class="ab">480-99988元</em><em>480元</em><em>998元</em><em>9999元</em><em>99988元</em></div>
+                <ul id="priceList" class="priceList">
+                    <li>标准版</li>
+                    <li>升级版</li>
+                    <li>豪华版</li>
+                    <li>定制版</li>
+                </ul>
+                <div id="changeNum" class="changeNum">
+                    <input type="text" value="1" />
+                    <button class="addBtn" type="button">+</button>
+                    <button class="subBtn" type="button" disabled>-</button>
+                </div>
+                <button id="okBtn" class="okBtn" type="button" disabled>加入购物车</button>
+            </div>
+            <div id="bigBox" class="bigBox"><img src="4.jpeg" alt="" /></div>
+        </div>
+        <div id="shopCart" class="shopCart">
+            购物车
+            <p id="shopNum" class="shopNum">0</p>
+        </div>
+        <script>
+            class lei {
+                constructor() {
+                    this.box = document.querySelector('.girlImg')
+                    this.span = document.querySelector('.girlImg span')
+                    this.img = document.querySelector('.bigBox img')
+                    this.bigBox = document.querySelector('.bigBox')
+                    this.shopping = document.querySelector('.shopping')
+                    this.newfun()
+                }
+                newfun() {
+                    this.box.onmousemove = (e) => {
+                        this.span.style.display = 'block'
+                        this.bigBox.style.display = 'block'
+                        let top = e.clientY - this.shopping.offsetTop - this.span.offsetHeight / 2
+                        let left = e.clientX - this.shopping.offsetLeft - this.span.offsetWidth / 2
+                        this.move(left, top)
+                    }
+                    this.box.onmouseleave = (e) => {
+                        this.span.style.display = 'none'
+                        this.bigBox.style.display = 'none'
+                    }
+                }
+                move(left, top) {
+                    if (left < 0) left = 0
+                    if (top < 0) top = 0
+                    if (left > this.box.offsetWidth - this.span.offsetWidth) left = this.box.offsetWidth - this.span.offsetWidth
+                    if (top > this.box.offsetHeight - this.span.offsetHeight) top = this.box.offsetHeight - this.span.offsetHeight
+                    this.span.style.left = left + 'px'
+                    this.span.style.top = top + 'px'
+                    this.img.style.left = -2 * left + 'px'
+                    this.img.style.top = -2 * top + 'px'
+                }
+            }
+            new lei()
+
+            // 获取元素
+            var index = 0
+            var lastIndex = 0
+            var ol = document.querySelector('ol')
+            ;(li = Array.from(ol.querySelectorAll('li'))), (priceList = document.querySelector('#priceList')), (priceLi = Array.from(priceList.querySelectorAll('li')))
+            var bigImg = document.querySelector('.bigBox img')
+            var img = document.querySelector('.bigBox img')
+            var addBtn = document.querySelector('.addBtn')
+            var input = document.querySelector('.changeNum input')
+            var okBtn = document.querySelector('.okBtn')
+            var subBtn = document.querySelector('.subBtn')
+            var shopNum = document.querySelector('#shopNum')
+            var shopCart = document.querySelector('#shopCart')
+            var em = document.querySelectorAll('#price em')
+            console.log(em)
+            // 链接图片
+            li.forEach((btn, i) => {
+                btn.onclick = () => {
+                    lastIndex = index
+                    index = i
+                    li[lastIndex].className = ''
+                    li[i].className = 'ac'
+                    priceLi[lastIndex].className = ''
+                    priceLi[index].className = 'ac'
+                }
+            })
+            priceLi.forEach((btn, i) => {
+                btn.onclick = () => {
+                    lastIndex = index
+                    index = i
+                    li[lastIndex].className = ''
+                    li[i].className = 'ac'
+                    priceLi[lastIndex].className = ''
+                    priceLi[index].className = 'ac'
+                }
+            })
+            // 按钮修改图片
+            function changeImg(i) {
+                lastIndex = index
+                index = i
+                li[lastIndex].className = ''
+                li[i].className = 'ac'
+                priceLi[lastIndex].className = ''
+                priceLi[index].className = 'ac'
+                girl.src = i + '.jpg'
+                img.src = i + '.jpg'
+                // 默认时应该是488-99998
+                em[0].className = ''
+                em[lastIndex + 1].className = ''
+                em[index + 1].className = 'ab'
+            }
+            li.forEach((btn, i) => {
+                btn.onclick = () => {
+                    changeImg(i)
+                }
+            })
+            priceLi.forEach((btn, i) => {
+                btn.onclick = () => {
+                    changeImg(i)
+                }
+            })
+
+            // 加减值
+            addBtn.onclick = function () {
+                input.value++
+                if (input.value > 1) {
+                    okBtn.disabled = false
+                    subBtn.disabled = false
+                }
+                if (input.value > 5) {
+                    input.value = 5
+                    alert('要不了了')
+                }
+                subBtn.onclick = function () {
+                    input.value--
+                    if (input.value < 1) {
+                        input.value = 1
+                        okBtn.disabled = true
+                    }
+                }
+            }
+
+            //购物车
+
+            okBtn.onclick = function (e) {
+                addBtn.disabled = true
+                subBtn.disabled = true
+
+                var x1 = e.clientX,
+                    y1 = e.clientY,
+                    x2 = shopCart.offsetLeft,
+                    y2 = shopCart.offsetTop,
+                    x3 = window.innerWidth - 200,
+                    y3 = 50
+
+                var a = -((y2 - y3) * x1 - (x2 - x3) * y1 + x2 * y3 - x3 * y2) / ((x2 - x3) * (x1 - x2) * (x1 - x3))
+                var b = ((y2 - y3) * x1 * x1 + x2 * x2 * y3 - x3 * x3 * y2 - (x2 * x2 - x3 * x3) * y1) / ((x2 - x3) * (x1 - x2) * (x1 - x3))
+                var c = ((x2 * y3 - x3 * y2) * x1 * x1 - (x2 * x2 * y3 - x3 * x3 * y2) * x1 + (x2 * x2 * x3 - x2 * x3 * x3) * y1) / ((x2 - x3) * (x1 - x2) * (x1 - x3))
+                // 抛物线起点是鼠标坐标
+                var left = x1
+                // 创建一个抛物线的元素
+                var div = document.createElement('div')
+                div.className = 'active'
+                div.style.left = x1 + 'px'
+                div.style.top = y1 + 'px'
+                document.body.appendChild(div)
+                var timer = setInterval(() => {
+                    left += 5
+                    var top = a * left * left + b * left + c
+                    div.style.left = left + 'px'
+                    div.style.top = top + 'px'
+                    // 判断终点
+                    if (left >= x2) {
+                        clearInterval(timer)
+                        div.remove()
+                        // 购物车数量加一
+
+                        shopNum.innerHTML = parseInt(input.value) + parseInt(shopNum.innerHTML)
+                        addBtn.disabled = false
+                        subBtn.disabled = false
+                    }
+                }, 20)
+            }
+        </script>
+    </body>
+</html>
